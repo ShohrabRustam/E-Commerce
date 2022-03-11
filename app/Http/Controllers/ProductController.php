@@ -7,7 +7,8 @@ use App\Models\Products_;
 // use App\Models\User;
 use App\Models\Cart;
 use App\Models\Orders;
-use Session;
+use Illuminate\Support\Facades\Session;
+
 
 use Illuminate\Support\Facades\DB;
 
@@ -42,13 +43,13 @@ class ProductController extends Controller
         }
         else{
             return redirect('login');
-        } 
+        }
     }
-    
+
             public static function cartItem(){
                 $userId= Session::get('user')['id'];
                 return Cart::where('user_id',$userId)->count();
-                
+
             }
 
             public function cartList(){
@@ -63,7 +64,7 @@ class ProductController extends Controller
                 return view('cartList',['products'=>$products]);
 
             }
-             
+
             public function removeItemCart($id){
                     Cart::destroy($id);
                     return redirect('cartList');
@@ -75,7 +76,7 @@ class ProductController extends Controller
                 ->where('cart.user_id',$userId)
                 ->select('products_.*','cart.id as cart_id')
                 ->sum('products_.price');
-                 
+
                 return view('orderNow',['total'=> $total]);
 
             }
@@ -91,17 +92,17 @@ class ProductController extends Controller
                          $order->status="pending";
                          $order->payment_method=$req->payment;
                          $order->address_1=$req->address_1;
-                         $order->address_2=$req->address_2; 
+                         $order->address_2=$req->address_2;
                          $order->payment_status = "pending";
                          $order->save();
                          Cart::where('user_id',$userId)->delete();
                          ////////////////////////////////////
-                         
-                         
+
+
                         }
                         return redirect('/');
 
-                    
+
             }
 
             public function myOrder(){
@@ -121,5 +122,5 @@ class ProductController extends Controller
 
             }
 
-           
+
 }
